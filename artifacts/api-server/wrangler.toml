@@ -16,8 +16,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "bridgepath-db"
-# database_id is set after running: wrangler d1 create bridgepath-db
-database_id = ""
+database_id = "61adafa3-77a9-4d69-8d2e-6c0e3c6bffc9"
 
 [[r2_buckets]]
 binding = "R2_BUCKET"
