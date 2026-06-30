@@ -1,0 +1,414 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Prevent iOS Safari from auto-zooming when tapping inputs (requires font-size ≥ 16px) */
+@media (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Named semantic tokens for direct use */
+  --color-ink: hsl(var(--ink));
+  --color-cream: hsl(var(--cream));
+  --color-terracotta: hsl(var(--terracotta));
+  --color-marigold: hsl(var(--marigold));
+  --color-teal: hsl(var(--teal));
+
+  --font-sans: var(--app-font-sans);
+  --font-display: var(--app-font-display);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ══════════════════════════════════════════════════════════
+   WARM PAN-AFRICAN EDITORIAL
+   Palette: Terracotta · Marigold · Deep Teal
+   Feeling: Kente warmth + Gusto/Lattice HR editorial polish
+   ══════════════════════════════════════════════════════════ */
+:root {
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .07);
+
+  /* ── Named Brand Tokens ──────────────────────────────── */
+  /* Ivory Cream  — warm off-white, unbleached paper feel  */
+  --cream:        32 60% 97%;      /* #FEF9F4 */
+  /* Warm Ink     — deep near-black with brown undertone   */
+  --ink:          22 18% 11%;      /* #1E1511 */
+  /* Terracotta   — burnt sienna clay, earthy confidence   */
+  --terracotta:   16 72% 43%;      /* #C04020 */
+  /* Marigold     — golden-yellow ochre, optimism          */
+  --marigold:     38 90% 50%;      /* #F0A010 */
+  /* Deep Teal    — grounded blue-green, trust & balance   */
+  --teal:         184 58% 30%;     /* #1F7A78 */
+
+  /* ── Surface ─────────────────────────────────────────── */
+  /* Background: ivory cream — NOT pure white              */
+  --background:   32 60% 97%;      /* #FEF9F4 */
+  --foreground:   22 18% 11%;      /* warm near-black      */
+
+  --border:       28 28% 87%;      /* warm taupe — soft    */
+  --input:        28 28% 87%;
+  --ring:         16 72% 43%;      /* terracotta focus ring */
+
+  /* ── Cards ───────────────────────────────────────────── */
+  --card:         30 50% 99%;      /* #FFFCF9 — barely-there warm white */
+  --card-foreground: 22 18% 11%;
+  --card-border:  28 28% 90%;
+
+  /* ── Popover ─────────────────────────────────────────── */
+  --popover:      30 50% 99%;
+  --popover-foreground: 22 18% 11%;
+  --popover-border: 28 28% 88%;
+
+  /* ── Primary: Terracotta ─────────────────────────────── */
+  --primary:      16 72% 43%;      /* #C04020 */
+  --primary-foreground: 32 60% 97%; /* cream on terracotta */
+
+  /* ── Secondary: warm sand surface ───────────────────── */
+  --secondary:    30 35% 92%;      /* #EDE4DA warm beige chip */
+  --secondary-foreground: 22 18% 11%;
+
+  /* ── Muted: editorial warm grey ─────────────────────── */
+  --muted:        30 30% 94%;      /* #F2EDE6 — warm, NOT cool grey */
+  --muted-foreground: 24 12% 44%; /* warm mid-tone, NOT slate */
+
+  /* ── Accent: Marigold ────────────────────────────────── */
+  --accent:       38 90% 50%;      /* #F0A010 */
+  --accent-foreground: 22 18% 11%;
+
+  /* ── Destructive ─────────────────────────────────────── */
+  --destructive:  0 72% 50%;
+  --destructive-foreground: 32 60% 97%;
+
+  /* ── Sidebar ──────────────────────────────────────────── */
+  /* Warm charcoal sidebar: deep ink, NOT cool dark gray   */
+  --sidebar:      22 22% 13%;      /* #1E1511 warm charcoal */
+  --sidebar-foreground: 30 30% 90%;
+  --sidebar-border: 22 18% 20%;
+  --sidebar-primary: 16 72% 50%;   /* terracotta active     */
+  --sidebar-primary-foreground: 32 60% 97%;
+  --sidebar-accent: 22 18% 20%;    /* hover surface in sidebar */
+  --sidebar-accent-foreground: 30 30% 90%;
+  --sidebar-ring: 16 72% 50%;
+
+  /* ── Chart palette ───────────────────────────────────── */
+  --chart-1: 16 72% 43%;           /* terracotta */
+  --chart-2: 38 90% 50%;           /* marigold */
+  --chart-3: 184 58% 30%;          /* teal */
+  --chart-4: 16 55% 62%;           /* terracotta muted */
+  --chart-5: 38 65% 68%;           /* marigold muted */
+
+  /* ── Typography ─────────────────────────────────────── */
+  --app-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --app-font-display: 'Montserrat', system-ui, sans-serif;
+  --app-font-serif: 'Montserrat', system-ui, sans-serif;
+  --app-font-mono: 'ui-monospace', Menlo, monospace;
+
+  /* ── Shape ───────────────────────────────────────────── */
+  --radius: 0.75rem;
+
+  /* ── Shadows (warm-tinted, not cool black) ───────────── */
+  --shadow-2xs: 0px 1px 2px 0px rgba(28,16,8,0.05);
+  --shadow-xs:  0px 2px 4px 0px rgba(28,16,8,0.07);
+  --shadow-sm:  0px 4px 8px -2px rgba(28,16,8,0.09), 0px 2px 4px -2px rgba(28,16,8,0.04);
+  --shadow:     0px 8px 16px -4px rgba(28,16,8,0.11), 0px 4px 6px -4px rgba(28,16,8,0.05);
+  --shadow-md:  0px 12px 24px -4px rgba(28,16,8,0.13), 0px 6px 8px -4px rgba(28,16,8,0.06);
+  --shadow-lg:  0px 20px 32px -8px rgba(28,16,8,0.15), 0px 8px 12px -6px rgba(28,16,8,0.07);
+  --shadow-xl:  0px 28px 56px -16px rgba(28,16,8,0.20);
+  --shadow-2xl: 0px 56px 112px -24px rgba(28,16,8,0.24);
+
+  --tracking-normal: -0.015em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+/* Dark mode — available as a class, never the default */
+.dark {
+  --button-outline: rgba(255,255,255, .10);
+  --badge-outline: rgba(255,255,255, .05);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(255,255,255, .04);
+  --elevate-2: rgba(255,255,255, .09);
+
+  --background: 22 22% 9%;
+  --foreground: 30 30% 90%;
+  --border: 22 18% 20%;
+  --card: 22 22% 11%;
+  --card-foreground: 30 30% 90%;
+  --card-border: 22 18% 20%;
+  --sidebar: 22 22% 8%;
+  --sidebar-foreground: 30 30% 90%;
+  --sidebar-border: 22 18% 18%;
+  --sidebar-primary: 16 72% 52%;
+  --sidebar-primary-foreground: 22 22% 9%;
+  --sidebar-accent: 22 18% 18%;
+  --sidebar-accent-foreground: 30 30% 90%;
+  --sidebar-ring: 16 72% 52%;
+  --popover: 22 22% 11%;
+  --popover-foreground: 30 30% 90%;
+  --popover-border: 22 18% 20%;
+  --primary: 16 72% 52%;
+  --primary-foreground: 22 22% 9%;
+  --secondary: 22 18% 18%;
+  --secondary-foreground: 30 30% 90%;
+  --muted: 22 16% 15%;
+  --muted-foreground: 28 14% 58%;
+  --accent: 38 90% 56%;
+  --accent-foreground: 22 22% 9%;
+  --destructive: 0 62% 45%;
+  --destructive-foreground: 32 60% 97%;
+  --input: 22 18% 22%;
+  --ring: 16 72% 52%;
+  --chart-1: 16 72% 52%;
+  --chart-2: 38 90% 56%;
+  --chart-3: 184 58% 40%;
+  --chart-4: 16 55% 65%;
+  --chart-5: 38 65% 70%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground selection:bg-primary/20 selection:text-primary;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+    font-family: var(--app-font-display);
+  }
+}
+
+@layer utilities {
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  /* ── Section surface helpers ─────────────────────────── */
+
+  /* Ivory cream — primary page background, light sections */
+  .warm-section {
+    background-color: hsl(32 60% 97%);
+  }
+
+  /* Slightly deeper cream for alternating sections        */
+  .premium-grid-bg {
+    background-color: hsl(32 60% 97%);
+  }
+
+  /* Warm sand — subtle depth on secondary sections        */
+  .premium-grid-bg-dark {
+    background-color: hsl(30 40% 94%);
+  }
+
+  /* Ink section — warm near-black for inverted content    */
+  .section-ink {
+    background-color: hsl(22 22% 11%);
+    color: hsl(30 30% 90%);
+  }
+
+  /* Terracotta fill section                               */
+  .section-coral {
+    background-color: hsl(16 72% 43%);
+    color: hsl(32 60% 97%);
+  }
+
+  /* Cream section                                         */
+  .section-cream {
+    background-color: hsl(32 60% 97%);
+  }
+
+  /* Marigold fill section                                 */
+  .section-gold {
+    background-color: hsl(38 90% 50%);
+    color: hsl(22 18% 11%);
+  }
+
+  /* Teal fill — rare, trust signals only                  */
+  .section-teal {
+    background-color: hsl(184 58% 30%);
+    color: hsl(32 60% 97%);
+  }
+
+  /* ── Card interaction ────────────────────────────────── */
+  .focus-card-glow {
+    transform-style: preserve-3d;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .focus-card-glow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -12px rgba(192, 64, 32, 0.22);
+  }
+
+  /* ── Dashboard surfaces ──────────────────────────────── */
+  .dashboard-grid-surface {
+    background: hsl(32 60% 97%);
+  }
+
+  .dashboard-card {
+    background: rgba(255, 252, 249, 0.97);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 24px -8px rgba(192,64,32,0.10);
+  }
+
+  /* ── Elevation overlays ──────────────────────────────── */
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  .border.toggle-elevate::before {
+    inset: -1px;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
+    inset: -1px;
+  }
+
+  /* ── Grain texture overlay ───────────────────────────── */
+  /* Apply to dark sections for editorial depth             */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    z-index: 0;
+  }
+
+  .grain > * {
+    position: relative;
+    z-index: 1;
+  }
+}

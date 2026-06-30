@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <!-- Outer square: brand yellow-green -->
+  <rect width="64" height="64" rx="13" fill="#8CC63F"/>
+  <!-- Subtle inner highlight (top-left bevel) -->
+  <rect x="1" y="1" width="62" height="31" rx="12" fill="url(#topSheen)" opacity="0.18"/>
+  <!-- Dark teal inset panel -->
+  <rect x="6" y="6" width="52" height="52" rx="9" fill="#1e3d3a"/>
+  <!-- B letterform: vertical spine -->
+  <path d="M14 14 L14 50 L20 50 L20 14 Z" fill="#8CC63F" rx="1"/>
+  <!-- B letterform: upper D-bump -->
+  <path d="M20 14 C20 14 38 14 38 23 C38 32 20 32 20 32 L20 14 Z" fill="#8CC63F"/>
+  <!-- B letterform: lower D-bump (wider) -->
+  <path d="M20 32 C20 32 41 32 41 41 C41 50 20 50 20 50 L20 32 Z" fill="#8CC63F"/>
+  <!-- Diagonal path/bridge element — cuts across the B -->
+  <path d="M25 50 L47 14" stroke="#8CC63F" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- Subtle shadow under diagonal for depth -->
+  <path d="M25 50 L47 14" stroke="#1e3d3a" stroke-width="5.5" stroke-linecap="round" opacity="0.22" transform="translate(1.5,1.5)"/>
+  <path d="M25 50 L47 14" stroke="#8CC63F" stroke-width="5.5" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="topSheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

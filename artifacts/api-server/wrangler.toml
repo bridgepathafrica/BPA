@@ -1,0 +1,46 @@
+name = "bridgepath-api"
+main = "src/worker.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+# account_id is set via CLOUDFLARE_ACCOUNT_ID env var or `wrangler login`
+
+[alias]
+"pino-http" = "./src/compat/pino-http.ts"
+"bcrypt" = "bcryptjs"
+"sharp" = "./src/compat/sharp.ts"
+
+[define]
+"__dirname" = '""'
+"__filename" = '""'
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bridgepath-db"
+# database_id is set after running: wrangler d1 create bridgepath-db
+database_id = ""
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "bridgepath-uploads"
+
+[vars]
+NODE_ENV = "production"
+OAUTH_BASE_URL = "https://bridgepathnetwork.com"
+RESEND_FROM = "Bridgepath Africa <noreply@bridgepathnetwork.com>"
+
+# Secrets — set via `wrangler secret put` or Cloudflare dashboard (never commit values):
+# wrangler secret put TOKEN_SECRET
+# wrangler secret put PASSWORD_SALT
+# wrangler secret put RESEND_API_KEY
+# wrangler secret put GOOGLE_CLIENT_ID
+# wrangler secret put GOOGLE_CLIENT_SECRET
+# wrangler secret put STRIPE_SECRET_KEY
+# wrangler secret put OPENAI_API_KEY
+
+[[routes]]
+pattern = "bridgepathnetwork.com/api/*"
+zone_name = "bridgepathnetwork.com"
+
+[[routes]]
+pattern = "www.bridgepathnetwork.com/api/*"
+zone_name = "bridgepathnetwork.com"

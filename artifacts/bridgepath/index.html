@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <!-- Critical image preload — starts fetching the hero before JS runs (improves LCP) -->
+    <link rel="preload" href="/photos/hero-team-user.webp" as="image" type="image/webp" fetchpriority="high" />
+    <!-- Prefetch auth page photos — downloaded at idle priority so they're cache-warm when user clicks Sign in / Sign up -->
+    <link rel="prefetch" href="/photos/pro-team-outsource.webp" as="image" type="image/webp" />
+    <link rel="prefetch" href="/photos/pro-team-bright.webp" as="image" type="image/webp" />
+
+    <!-- Primary meta -->
+    <title>Bridgepath Africa — Africa's Premier HR &amp; Talent Platform</title>
+    <meta name="description" content="Bridgepath Africa connects African talent with global employers. Premium HR services, recruitment, and job opportunities across Africa — live in Ghana." />
+    <meta name="keywords" content="African jobs, HR Africa, recruitment Ghana, African talent, global employers, HR consulting Africa, pan-African hiring" />
+    <meta name="author" content="Bridgepath Africa" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph — used by WhatsApp, Facebook, LinkedIn, Slack, iMessage -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bridgepath Africa" />
+    <meta property="og:title" content="Bridgepath Africa — Africa's Premier HR &amp; Talent Platform" />
+    <meta property="og:description" content="Connecting African talent with global employers. Premium recruitment, HR consulting, and career opportunities across Africa — live in Ghana." />
+    <meta property="og:image" content="%VITE_APP_ORIGIN%/opengraph.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Bridgepath Africa — Hire Africa. Build the Future." />
+    <meta property="og:url" content="%VITE_APP_ORIGIN%" />
+    <meta property="og:locale" content="en_GB" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bridgepath Africa — Africa's Premier HR &amp; Talent Platform" />
+    <meta name="twitter:description" content="Connecting African talent with global employers. Premium recruitment, HR consulting, and career opportunities across Africa — live in Ghana." />
+    <meta name="twitter:image" content="%VITE_APP_ORIGIN%/opengraph.jpg" />
+    <meta name="twitter:image:alt" content="Bridgepath Africa — Hire Africa. Build the Future." />
+
+    <!-- Structured Data — Organization + WebSite schema (triggers Google Sitelinks) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://bridgepathafricahr.com/#organization",
+          "name": "Bridgepath Africa",
+          "url": "https://bridgepathafricahr.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://bridgepathafricahr.com/logo-new.png",
+            "width": 200,
+            "height": 200
+          },
+          "description": "Africa's premier HR and talent platform connecting professionals across Africa with global employers — live in Ghana.",
+          "foundingDate": "2024",
+          "areaServed": [
+            { "@type": "Country", "name": "Ghana" },
+            { "@type": "Continent", "name": "Africa" }
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "support@bridgepathnetwork.com",
+            "contactType": "customer service",
+            "availableLanguage": "English"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/company/bridgepath-africa",
+            "https://twitter.com/bridgepathafr",
+            "https://facebook.com/bridgepathafr"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://bridgepathafricahr.com/#website",
+          "name": "Bridgepath Africa",
+          "url": "https://bridgepathafricahr.com",
+          "publisher": { "@id": "https://bridgepathafricahr.com/#organization" },
+          "description": "Africa's premier HR and talent platform — job listings, EOR, payroll, recruitment, and HR consulting. Live in Ghana, expanding across Africa.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://bridgepathafricahr.com/jobs?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Fonts — Montserrat (professional headings) + Inter (clean UI body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZ56S23EHV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LZ56S23EHV');
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

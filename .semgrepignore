@@ -1,0 +1,12 @@
+# HTML email builder — all user data is pre-escaped via escapeHtml() before being passed in.
+# These files are intentional HTML/SVG construction utilities, not user-facing template injection.
+artifacts/api-server/src/lib/email.ts
+artifacts/api-server/src/routes/og-image.ts
+artifacts/api-server/src/routes/contact.ts
+artifacts/api-server/src/routes/cv-reviews.ts
+
+# Static blog content renderer — content is platform-authored (not user input); safeUrl() applied to links.
+artifacts/bridgepath/src/pages/blog/*.tsx
+
+# Mockup sandbox — canvas prototype tooling, not the production application.
+artifacts/mockup-sandbox/src/App.tsx

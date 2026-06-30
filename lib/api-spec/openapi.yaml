@@ -1,0 +1,1178 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Bridgepath Network API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: profiles
+    description: User profile operations
+  - name: jobs
+    description: Job listing operations
+  - name: applications
+    description: Job application operations
+  - name: cv-reviews
+    description: CV review operations
+  - name: payments
+    description: Payment operations
+  - name: stats
+    description: Statistics and analytics
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email already in use
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithProfile"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /profiles/{userId}:
+    get:
+      operationId: getProfile
+      tags: [profiles]
+      summary: Get a user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "404":
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateProfile
+      tags: [profiles]
+      summary: Update a user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileBody"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+
+  /jobs:
+    get:
+      operationId: listJobs
+      tags: [jobs]
+      summary: List jobs
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: location
+          in: query
+          schema:
+            type: string
+        - name: type
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: List of jobs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobListResponse"
+    post:
+      operationId: createJob
+      tags: [jobs]
+      summary: Create a job listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJobBody"
+      responses:
+        "201":
+          description: Job created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+
+  /jobs/{jobId}:
+    get:
+      operationId: getJob
+      tags: [jobs]
+      summary: Get a job listing
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Job found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+        "404":
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateJob
+      tags: [jobs]
+      summary: Update a job listing
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJobBody"
+      responses:
+        "200":
+          description: Job updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Job"
+    delete:
+      operationId: deleteJob
+      tags: [jobs]
+      summary: Delete a job listing
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Job deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /jobs/{jobId}/applications:
+    get:
+      operationId: getJobApplications
+      tags: [applications]
+      summary: Get applications for a job
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+
+  /applications:
+    post:
+      operationId: createApplication
+      tags: [applications]
+      summary: Apply for a job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateApplicationBody"
+      responses:
+        "201":
+          description: Application submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Application"
+        "409":
+          description: Already applied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /applications/my:
+    get:
+      operationId: getMyApplications
+      tags: [applications]
+      summary: Get current user's applications
+      responses:
+        "200":
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+
+  /applications/{applicationId}/status:
+    put:
+      operationId: updateApplicationStatus
+      tags: [applications]
+      summary: Update application status
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateApplicationStatusBody"
+      responses:
+        "200":
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Application"
+
+  /cv-reviews:
+    post:
+      operationId: createCvReview
+      tags: [cv-reviews]
+      summary: Submit CV for AI review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCvReviewBody"
+      responses:
+        "201":
+          description: CV review created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CvReview"
+
+  /cv-reviews/my:
+    get:
+      operationId: getMyCvReviews
+      tags: [cv-reviews]
+      summary: Get current user's CV reviews
+      responses:
+        "200":
+          description: List of CV reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CvReview"
+
+  /cv-reviews/{reviewId}:
+    get:
+      operationId: getCvReview
+      tags: [cv-reviews]
+      summary: Get a CV review
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: CV review found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CvReview"
+
+  /cv-reviews/{reviewId}/human-review:
+    post:
+      operationId: requestHumanReview
+      tags: [cv-reviews]
+      summary: Request human HR review (paid upgrade)
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestHumanReviewBody"
+      responses:
+        "200":
+          description: Human review requested
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CvReview"
+
+  /payments/create-checkout:
+    post:
+      operationId: createCheckoutSession
+      tags: [payments]
+      summary: Create Stripe checkout session for human review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCheckoutBody"
+      responses:
+        "200":
+          description: Checkout session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutResponse"
+
+  /payments/verify:
+    post:
+      operationId: verifyPayment
+      tags: [payments]
+      summary: Verify a payment session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyPaymentBody"
+      responses:
+        "200":
+          description: Payment verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentVerifyResponse"
+
+  /stats/dashboard:
+    get:
+      operationId: getDashboardStats
+      tags: [stats]
+      summary: Get dashboard statistics for current user
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /stats/jobs:
+    get:
+      operationId: getJobStats
+      tags: [stats]
+      summary: Get job listing statistics
+      responses:
+        "200":
+          description: Job stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        name:
+          type: string
+        role:
+          type: string
+          enum: [job_seeker, employer, admin]
+      required:
+        - email
+        - password
+        - name
+        - role
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [job_seeker, employer, admin]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - name
+        - role
+        - createdAt
+
+    Profile:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        bio:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+        experience:
+          type: string
+          nullable: true
+        education:
+          type: string
+          nullable: true
+        linkedinUrl:
+          type: string
+          nullable: true
+        portfolioUrl:
+          type: string
+          nullable: true
+        resumeUrl:
+          type: string
+          nullable: true
+        companyName:
+          type: string
+          nullable: true
+        companyWebsite:
+          type: string
+          nullable: true
+        industry:
+          type: string
+          nullable: true
+        companySize:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - skills
+        - createdAt
+        - updatedAt
+
+    UserWithProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [job_seeker, employer, admin]
+        createdAt:
+          type: string
+          format: date-time
+        profile:
+          $ref: "#/components/schemas/Profile"
+          nullable: true
+      required:
+        - id
+        - email
+        - name
+        - role
+        - createdAt
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/UserWithProfile"
+        token:
+          type: string
+      required:
+        - user
+        - token
+
+    UpdateProfileBody:
+      type: object
+      properties:
+        bio:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        experience:
+          type: string
+        education:
+          type: string
+        linkedinUrl:
+          type: string
+        portfolioUrl:
+          type: string
+        resumeUrl:
+          type: string
+        companyName:
+          type: string
+        companyWebsite:
+          type: string
+        industry:
+          type: string
+        companySize:
+          type: string
+
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+        employerId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        requirements:
+          type: string
+          nullable: true
+        location:
+          type: string
+        country:
+          type: string
+        type:
+          type: string
+          enum: [full_time, part_time, contract, internship, remote]
+        salaryMin:
+          type: integer
+          nullable: true
+        salaryMax:
+          type: integer
+          nullable: true
+        currency:
+          type: string
+          nullable: true
+        industry:
+          type: string
+          nullable: true
+        skills:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+        applicantCount:
+          type: integer
+        employer:
+          $ref: "#/components/schemas/User"
+          nullable: true
+        employerProfile:
+          $ref: "#/components/schemas/Profile"
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - employerId
+        - title
+        - description
+        - location
+        - country
+        - type
+        - skills
+        - isActive
+        - applicantCount
+        - createdAt
+        - updatedAt
+
+    JobListResponse:
+      type: object
+      properties:
+        jobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Job"
+        total:
+          type: integer
+        page:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - jobs
+        - total
+        - page
+        - totalPages
+
+    CreateJobBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        requirements:
+          type: string
+        location:
+          type: string
+        country:
+          type: string
+        type:
+          type: string
+          enum: [full_time, part_time, contract, internship, remote]
+        salaryMin:
+          type: integer
+        salaryMax:
+          type: integer
+        currency:
+          type: string
+        industry:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+      required:
+        - title
+        - description
+        - location
+        - country
+        - type
+        - skills
+
+    Application:
+      type: object
+      properties:
+        id:
+          type: integer
+        jobId:
+          type: integer
+        applicantId:
+          type: integer
+        coverLetter:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [pending, reviewing, shortlisted, rejected, accepted]
+        job:
+          $ref: "#/components/schemas/Job"
+          nullable: true
+        applicant:
+          $ref: "#/components/schemas/User"
+          nullable: true
+        applicantProfile:
+          $ref: "#/components/schemas/Profile"
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - jobId
+        - applicantId
+        - status
+        - createdAt
+        - updatedAt
+
+    CreateApplicationBody:
+      type: object
+      properties:
+        jobId:
+          type: integer
+        coverLetter:
+          type: string
+      required:
+        - jobId
+
+    UpdateApplicationStatusBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, reviewing, shortlisted, rejected, accepted]
+      required:
+        - status
+
+    AiSkillBreakdown:
+      type: object
+      properties:
+        skill:
+          type: string
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced, expert]
+        yearsExperience:
+          type: integer
+      required:
+        - skill
+        - level
+        - yearsExperience
+
+    AiReviewResult:
+      type: object
+      properties:
+        overallScore:
+          type: integer
+          description: Score out of 100
+        jobReadinessScore:
+          type: integer
+        formattingScore:
+          type: integer
+        skillsScore:
+          type: integer
+        experienceScore:
+          type: integer
+        industryAlignmentScore:
+          type: integer
+        summary:
+          type: string
+        strengths:
+          type: array
+          items:
+            type: string
+        improvements:
+          type: array
+          items:
+            type: string
+        skillsBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/AiSkillBreakdown"
+        careerInsights:
+          type: string
+        recommendedRoles:
+          type: array
+          items:
+            type: string
+      required:
+        - overallScore
+        - jobReadinessScore
+        - formattingScore
+        - skillsScore
+        - experienceScore
+        - industryAlignmentScore
+        - summary
+        - strengths
+        - improvements
+        - skillsBreakdown
+        - careerInsights
+        - recommendedRoles
+
+    HumanReviewResult:
+      type: object
+      properties:
+        professionalFeedback:
+          type: string
+        structureImprovements:
+          type: string
+        hiringReadiness:
+          type: string
+        recommendedRoles:
+          type: array
+          items:
+            type: string
+        suggestedImprovements:
+          type: array
+          items:
+            type: string
+        reviewerName:
+          type: string
+        reviewedAt:
+          type: string
+          format: date-time
+      required:
+        - professionalFeedback
+        - structureImprovements
+        - hiringReadiness
+        - recommendedRoles
+        - suggestedImprovements
+        - reviewerName
+        - reviewedAt
+
+    CvReview:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        cvFileName:
+          type: string
+        cvText:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [pending, ai_processing, ai_complete, human_pending, human_processing, human_complete, failed]
+        aiReview:
+          $ref: "#/components/schemas/AiReviewResult"
+          nullable: true
+        humanReview:
+          $ref: "#/components/schemas/HumanReviewResult"
+          nullable: true
+        paymentStatus:
+          type: string
+          enum: [none, pending, paid]
+        stripeSessionId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - userId
+        - cvFileName
+        - status
+        - paymentStatus
+        - createdAt
+        - updatedAt
+
+    CreateCvReviewBody:
+      type: object
+      properties:
+        cvFileName:
+          type: string
+        cvText:
+          type: string
+      required:
+        - cvFileName
+        - cvText
+
+    RequestHumanReviewBody:
+      type: object
+      properties:
+        stripeSessionId:
+          type: string
+      required:
+        - stripeSessionId
+
+    CreateCheckoutBody:
+      type: object
+      properties:
+        reviewId:
+          type: integer
+        successUrl:
+          type: string
+        cancelUrl:
+          type: string
+      required:
+        - reviewId
+        - successUrl
+        - cancelUrl
+
+    CheckoutResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        url:
+          type: string
+      required:
+        - sessionId
+        - url
+
+    VerifyPaymentBody:
+      type: object
+      properties:
+        sessionId:
+          type: string
+      required:
+        - sessionId
+
+    PaymentVerifyResponse:
+      type: object
+      properties:
+        paid:
+          type: boolean
+        reviewId:
+          type: integer
+          nullable: true
+      required:
+        - paid
+
+    DashboardStats:
+      type: object
+      properties:
+        totalApplications:
+          type: integer
+        pendingApplications:
+          type: integer
+        shortlistedApplications:
+          type: integer
+        acceptedApplications:
+          type: integer
+        totalJobs:
+          type: integer
+        activeJobs:
+          type: integer
+        totalApplicants:
+          type: integer
+        cvReviews:
+          type: integer
+        recentApplications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Application"
+      required:
+        - totalApplications
+        - pendingApplications
+        - shortlistedApplications
+        - acceptedApplications
+        - totalJobs
+        - activeJobs
+        - totalApplicants
+        - cvReviews
+        - recentApplications
+
+    JobStats:
+      type: object
+      properties:
+        totalJobs:
+          type: integer
+        byType:
+          type: object
+          additionalProperties:
+            type: integer
+        byCountry:
+          type: object
+          additionalProperties:
+            type: integer
+        byIndustry:
+          type: object
+          additionalProperties:
+            type: integer
+        recentJobs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Job"
+      required:
+        - totalJobs
+        - byType
+        - byCountry
+        - byIndustry
+        - recentJobs
